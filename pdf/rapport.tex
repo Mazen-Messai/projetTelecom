@@ -1,0 +1,143 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+\usepackage{tikz}
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+
+\geometry{margin=2cm}
+
+\title{Projet de Télécommunication\\\large Introduction à l'égalisation}
+\author{Elena Fleury, Mazen Messai}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Étude théorique}
+\textbf{Question 1 :}
+Si on considère qu'il n'y aucun obstacle entre l'émetteur et le recepteur, on peut modéliser le signal reçu avant égalisation par la relation suivante :
+\[
+y_e(t) = \alpha_0 (t-\tau_0) + \alpha_1 x_e(t-\tau_1)
+\]
+Avec $\alpha_0$ le coefficient d'attenuation directe, $\alpha_1$ le coefficent d'attenueation réfléchie, et $\tau_0$ et $\tau_1$ les retards induits
+\newline \par
+
+\textbf{Question 2 :}
+En écrivant $y_e = h_c(x_e)$ en déduit que $h_c(t)$ s'écrit :
+\[
+h_c(t) = \alpha_0 \delta(t-\tau_0) + \alpha_1 \delta(t-\tau_1)
+\]
+\newline \par
+
+\textbf{Question 3 :}
+On prend pour $h$ et $h_r$ une réponse en fenêtre réctangulaire de largeur $T_s$.
+On a donc  $z(n) = h_r * h_c * h(n) = h_r * [\alpha_0 h(t-\tau_0) + \alpha_1 h(t-\tau_1)] = (\alpha_0 + \alpha_1)g(t) = 1.5 g(t)$
+Avec $g(t)$ la réponse impulsionnelle du filtre de réception dont le tracé est donné par la figure 1.
+\begin{center}
+\begin{tikzpicture}[scale=2]
+    % Réponse impulsionnelle triangulaire de hauteur T_s et largeur 2T_s
+    \draw[->] (-0.5,0) -- (2.5,0) node[right] {$t$};
+    \draw[->] (0,-0.2) -- (0,1.2) node[above] {$h_r*h(t)$};
+
+    % Graduation sur l'axe des abscisses
+    \draw[thick] (0,0.08) -- (0,-0.08);
+    \node[below] at (-0.15,-0.08) {$0$};
+
+    \foreach \x/\label in {1/{T_s}, 2/{2T_s}} {
+        \draw[thick] (\x,0.08) -- (\x,-0.08);
+        \node[below] at (\x,-0.08) {$\label$};
+    }
+
+    % Graduation sur l'axe des ordonnées
+    \draw[thick] (0.08,1) -- (-0.08,1);
+    \node[left] at (-0.08,1) {$T_s$};
+
+    % Triangle
+    \draw[thick,blue] (0,0) -- (1,1) -- (2,0);
+
+    % Optionnel : pointillés pour visualiser la hauteur
+    \draw[dashed,gray] (1,0) -- (1,1);
+\end{tikzpicture}
+\end{center}
+\begin{center}\textit{Figure 1} - Réponse impulsionnelle du filtre de $h_r * h(t)$\end{center}
+
+
+\begin{center}
+\begin{tikzpicture}[scale=1.1]
+    % Quadrillage
+    \draw[very thin,gray!50] (0,-1.5) grid[xstep=1,ystep=0.5] (8,1.5);
+
+    % Axes
+    \draw[->] (0,-1.7) -- (0,1.7) node[above] {$z(n)$};
+    \draw[->] (-0.3,0) -- (8.5,0) node[right] {$t$};
+
+    % Graduation Ts sur l'axe des abscisses
+    \draw[thick] (0,0.08) -- (0,-0.08);
+    \node[below] at (-0.15,-0.08) {$0$};
+    \foreach \x in {1,...,8} {
+        \draw[thick] (\x,0.08) -- (\x,-0.08);
+        \node[below] at (\x,-0.08) {$\x T_s$};
+    }
+
+    % Graduation sur l'axe des ordonnées
+    \foreach \y in {-1.5,1.5} {
+        \draw[thick] (0.08,\y) -- (-0.08,\y);
+        \node[left] at (-0.08,\y) {$\y T_s$};
+    }
+
+    % Ajout des lignes
+    \draw[thick,blue] (1,0) -- (2,1) -- (4,-1) -- (6,1) -- (7,0);
+    \draw[thick,blue] (0,0) -- (1,-1) -- (3,1) -- (5,-1) -- (6,0);
+    \draw[thick,red] (0,0) -- (1,-1) -- (2,1) -- (3,1)--(4,-1)--(5,-1) -- (6,1)--(7,0);
+\end{tikzpicture}
+\end{center}
+\begin{center}\textit{Figure 2} - Signal en sortie du filtre de réception pour la séquence 011001 \end{center}
+\newpage\par
+\textbf{Question 4 :}
+En prenant $t_0 \in \{0, 2T_s\}$, on à bien uniquement deux points sur le diagramme de l'oeil. Il est donc possible de respecter le critère de Nyquist sur cette chaîne de transmission.
+\begin{center}
+\begin{tikzpicture}[scale = 1.5]
+    % Axes
+    \draw[->] (-0.5,1) -- (2.2,1) node[right] {$t$};
+    \draw[->] (0,-0.1) -- (0,2.1) node[above] {$T_s$};
+
+    % Graduation sur l'axe des abscisses
+    \draw[thick] (0,0.95) -- (0,1.05);
+    \node[below] at (-0.15,0.90) {0};
+    \foreach \x/\label in {1/{T_s}, 2/{2T_s}} {
+        \draw[thick] (\x,0.95) -- (\x,1.05);
+        \node[below] at (\x,0.90) {$\label$};
+    }
+
+    % Graduation sur l'axe des ordonnées
+
+    \draw[thick,blue] (0,2) -- (2,2) -- (0,0) -- (2,0) -- (0,2) -- (1,0) -- (2,2) -- (0,0) -- (1,2) -- (2,0);
+    \end{tikzpicture}
+    \end{center}
+\begin{center}\textit{Figure 3} - diagramme de l’oeil sans bruit en sortie du ﬁltre de réception $h_r(t)$ \end{center}
+
+\textbf{Question 5 :}
+On prend $t_0 = T_s$, donc on à un seuil nul, le critère de Nyquist qui est respecté, et nous considérons que les symboles sont indépendants et équiprobables.
+On a donc : $\displaystyle \text{TEB}= Q\bigg (\dfrac{V g(t_0)}{\sigma_w} \bigg) =Q\bigg (\dfrac{3T_s}{2\sigma_w} \bigg) $.
+\vspace{0.5cm}
+\par
+\textbf{Question 6 :} $ \displaystyle\sigma^2_w = \int_{\mathbb{R}} N_0 | H_r(f)|^2 \,\mathrm{d}f = N_0 \int_{\mathbb{R}} |h_r(t)|^2 \,\mathrm{d}t = N_0 T_s$
+\newline \par
+
+\textbf{Question 7 :} $E_S = P_sT_s = \dfrac{3}{2}T_s^2$
+\newline \par
+
+\textbf{Question 8 :} On à $T_s = \sqrt{\dfrac{2}{3}E_s}$ et $E_b = E_s$ (mapping binaire), on  en déduit donc que : \newline
+ $\displaystyle \text{TEB} =Q\bigg (\dfrac{3T_s}{2\sigma_w} \bigg) = Q\bigg(\sqrt{\dfrac{3}{2}\dfrac{E_s}{N_0}}\bigg)= Q\bigg(\sqrt{\dfrac{3}{2}\dfrac{E_b}{N_0}}\bigg)$ \newline
+ 
+
+\end{document}
