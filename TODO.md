@@ -1,17 +1,17 @@
 ## Partie 1 - Étude théorique
 
 ### Canal multitrajet
-- [ ] Écrire l’expression de `ye(t)` en fonction de `xe(t)`, `α0`, `α1`, `τ0`, `τ1`
-- [ ] En déduire la réponse impulsionnelle `hc(t)` du canal
-- [ ] Choisir : `τ0 = 0`, `τ1 = Ts`, `α0 = 1`, `α1 = 0.5`
+- [x] Écrire l’expression de `ye(t)` en fonction de `xe(t)`, `α0`, `α1`, `τ0`, `τ1`
+- [x] En déduire la réponse impulsionnelle `hc(t)` du canal
+- [x] Choisir : `τ0 = 0`, `τ1 = Ts`, `α0 = 1`, `α1 = 0.5`
 
 ### Visualisations sans bruit
-- [ ] Tracer le **signal en sortie du filtre de réception** `hr(t)` pour une séquence `011001`
-- [ ] Tracer le **diagramme de l’œil** (sans bruit)
-- [ ] Estimer la faisabilité du critère de Nyquist
-- [ ] Calculer le **TEB théorique** avec détecteur à seuil
-- [ ] Exprimer la puissance du bruit `σ²_w` en fonction de `N0` et `Ts`
-- [ ] Exprimer l’énergie symbole `Es` et déduire `TEB(Eb/N0)`
+- [x] Tracer le **signal en sortie du filtre de réception** `hr(t)` pour une séquence `011001`
+- [x] Tracer le **diagramme de l’œil** (sans bruit)
+- [x] Estimer la faisabilité du critère de Nyquist
+- [x] Calculer le **TEB théorique** avec détecteur à seuil
+- [x] Exprimer la puissance du bruit `σ²_w` en fonction de `N0` et `Ts`
+- [x] Exprimer l’énergie symbole `Es` et déduire `TEB(Eb/N0)`
 
 ## Partie 2 - Implantation MATLAB
 
