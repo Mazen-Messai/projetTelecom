@@ -1,6 +1,7 @@
 # Projet Telecom
 
 ## Structure du projet
+```
 projetTelecom/
 ├── main.m
 ├── README.md
@@ -23,3 +24,4 @@ projetTelecom/
 │ ├── tracer_constellation.m # Affiche la constellation BPSK reçue
 │ └── tracer_signaux.m # Visualise les signaux à différents points de la chaîne
 └── data/ # Dossier ou on stocke toute les données, il vaut mieux essayer de tout enregistrer.
+```
