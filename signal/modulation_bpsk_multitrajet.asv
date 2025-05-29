@@ -1,4 +1,4 @@
-function [signal_bpsk, signal_recu_filtre_bpsk, echelle, echelle_filtre, oeil_bpsk, TEB_bpsk] = modulation_bpsk_multitrajet(bits, Fe, Rb)
+function [signal_bpsk, signal_recu_filtre_bpsk, echelle, echelle_filtre, oeil_bpsk] = modulation_bpsk_multitrajet(bits, Fe, Rb)
     % modulation_bpsk : Modulation BPSK d'une séquence binaire avec multitrajet
     % Entrées :
     %   bits : vecteur de 0 et 1 (signal binaire)
@@ -45,7 +45,7 @@ function [signal_bpsk, signal_recu_filtre_bpsk, echelle, echelle_filtre, oeil_bp
 
     % Échantillonnage à n0 + mNs
     n0 = Ns;
-    signal_bpsk = signal_recu_filtre_bpsk(n0:Ns:end);
+    signal_bpsk = signal_recu_filtre_bpsk(Ns:Ns:end);
 
     % Échelle de temps
     echelle = 0:Te:(length(signal_bpsk)-1)*Te;
@@ -53,12 +53,4 @@ function [signal_bpsk, signal_recu_filtre_bpsk, echelle, echelle_filtre, oeil_bp
     
     %oeil en sortie du filtre de reception
     oeil_bpsk =reshape(signal_recu_filtre_bpsk,Ns,length(signal_recu_filtre_bpsk)/Ns);
-    
-    %symboles reçus
-    symboles_recus = (signal_bpsk > 0) * 2 - 1;
-
-    %bits reçus
-    bits_recus = (symboles_recus + 1) / 2;
-    %calcul du TEB
-    TEB_bpsk = (sum(bits_recus ~= bits)) / length(bits);
 end
