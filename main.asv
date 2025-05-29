@@ -43,9 +43,9 @@ ylabel('TEB')
 
 %comparaison TEB avec et sans canal multitrajet
 figure
-semilogy(tab_Eb_N0_dB, TEB_bpsk_sans_canal,'r-x')
+semilogy(tab_Eb_N0_dB, TEB_bpsk,'r-x')
 hold on
 semilogy(tab_Eb_N0_dB, TEB_bpsk_bruit,'b-o')
-legend('TEB sans multitrajet','TEB avec multitrajet')
+legend('TEB théorique','TEB simulé')
 xlabel('E_b/N_0 en dB')
 ylabel('TEB')
