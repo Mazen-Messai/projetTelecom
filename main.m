@@ -1,6 +1,9 @@
 clear all;
 close all;
 addpath('signal');
+addpath('utils');
+addpath('signal');
+addpath('egaliseur');
 
 %paramètres
 bits = [0 1 1 0 0 1]; %bits
@@ -18,6 +21,10 @@ Rb = 3000;            %Débit binaire
 figure
 plot(echelle_filtre, signal_recu_filtre_bpsk, 'o');
 title('Signal BPSK modulé');
+
+%tracé de la constellation en sortie du filtre de réception bpsk sans bruit
+figure
+tracer_constellation(signal_bpsk, 'PSK', 2);
 
 %tracé du diagramme de l'oeil en sortie du filtre de réception bpsk sans
 %bruit
