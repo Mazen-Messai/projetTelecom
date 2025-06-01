@@ -6,12 +6,13 @@ addpath('signal');
 addpath('egaliseur');
 
 %paramètres
-bits = [0 1 1 0 0 1]; %bits
+bits = randi([0 1], 1, 400);  % séquence aléatoire de 100 bits
 Fe = 24000;           %Fréquence d'échantillonage
 Rb = 3000;            %Débit binaire
+Ns = Fe/Rb;
 
 % Modulation bpsk multitrajet sans bruit
-[signal_bpsk, signal_recu_filtre_bpsk, echelle, echelle_filtre, oeil_bpsk, TEB_bpsk] = modulation_bpsk_multitrajet(bits, Fe, Rb);
+[signal_bpsk, signal_recu_filtre_bpsk, echelle, echelle_filtre, oeil_bpsk, TEB_bpsk, hc] = modulation_bpsk_multitrajet(bits, Fe, Rb);
 % Modulation bpsk multitrajet avec bruit
 [TEB_bpsk_bruit, TEB_theorique, tab_Eb_N0_dB] = modulation_bpsk_multitrajet_bruit(Fe, Rb);
 % Modulation bpsk avec bruit sans canal multitrajet
@@ -56,3 +57,16 @@ semilogy(tab_Eb_N0_dB, TEB_bpsk_bruit,'b-o')
 legend('TEB sans multitrajet','TEB avec multitrajet')
 xlabel('E_b/N_0 en dB')
 ylabel('TEB')
+
+
+% Égaliseur MMSE
+% 1A : Déterminer les coefficients du filtre MMSE
+C = apprentissage_mmse(bits, signal_recu_filtre_bpsk, Ns, 5);
+
+% 1B : Réponse en fréquence du canal de propagation
+figure;
+tracer_reponse_en_frequence(hc, C);
+
+% 1C : Réponse impulsionnelle de lq chaîne de transmission
+figure;
+tracer_reponse_impulsionnelle(hc, C);

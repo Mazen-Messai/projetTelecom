@@ -1,4 +1,4 @@
-function [signal_bpsk, signal_recu_filtre_bpsk, echelle, echelle_filtre, oeil_bpsk, TEB_bpsk] = modulation_bpsk_multitrajet(bits, Fe, Rb)
+function [signal_bpsk, signal_recu_filtre_bpsk, echelle, echelle_filtre, oeil_bpsk, TEB_bpsk, hc] = modulation_bpsk_multitrajet(bits, Fe, Rb)
     % modulation_bpsk : Modulation BPSK d'une séquence binaire avec multitrajet
     % Entrées :
     %   bits : vecteur de 0 et 1 (signal binaire)
