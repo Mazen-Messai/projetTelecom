@@ -1,42 +1,47 @@
 function C = apprentissage_mmse(bits, signal_recu, Ns, N)
-    % apprentissage_mmse : Calcule les coefficients de l'égaliseur MMSE
+    % APPRENTISSAGE_MMSE : calcule les coefficients du filtre MMSE
     %
     % Entrées :
-    %   - bits         : vecteur binaire transmis (0 ou 1)
-    %   - signal_recu  : signal reçu suréchantillonné (en sortie du filtre de réception)
-    %   - Ns           : facteur de suréchantillonnage (échantillons par symbole)
-    %   - N            : ordre du filtre égaliseur (nombre de taps - 1)
-    %
+    %   bits        : vecteur binaire (1×Nb)
+    %   signal_recu : vecteur suréchantillonné (1×L) en sortie du filtre Rx
+    %   Ns          : facteur de suréchantillonnage
+    %   N           : ordre du filtre (nombre de taps - 1)
     % Sortie :
-    %   - C            : coefficients du filtre égaliseur MMSE (colonne)
+    %   C           : vecteur (N+1)×1 des coefficients MMSE
 
-    % Mapping binaire centré
-    symboles = 2*bits - 1;
+    % Conversion en colonnes
+    bits = bits(:);                      % Nb×1
+    symboles = 2*bits - 1;               % mapping BPSK
 
-    % Extraction des vecteurs z_n centrés sur les pics attendus
-    n0 = Ns;  % position de l’échantillon optimal
+    r = signal_recu(:);                  % vecteur colonne suréchantillonné
+
     Nb = length(symboles);
-    M = Nb - N;  % nombre d’exemples exploitables
+    L  = length(r);
 
-    % Initialisation
-    Z_all = zeros(M, N+1);  % chaque ligne = un vecteur z_n
-    for i = 1:M
-        debut = n0 + (i+N-1)*Ns;
-        if debut > length(signal_recu)
-            break;  % protection contre dépassement
-        end
-        Z_all(i, :) = signal_recu(debut:-1:debut-N);
+    % Position du 1er échantillon utile = Ns
+    n0 = Ns;
+
+    % Nombre de vecteurs exploitables = Nb - N  (on tronque si besoin)
+    M = Nb - N;
+    if M <= 0
+        error('Nb (%d) doit dépasser l’ordre N (%d) pour un apprentissage valide', Nb, N);
     end
 
-    a_used = symboles(N+1:N+M).';  % vecteur colonne
+    % Construire la matrice Z_all (M × (N+1))
+    Z_all = zeros(M, N+1);
+    for i = 1:M
+        idx_center = n0 + (i+N-1)*Ns;  
+        % Fenêtre glissante de longueur N+1 sur r :
+        Z_all(i, :) = r(idx_center:-1:idx_center-N).';
+    end
 
-    % Calculs statistiques
-    Rzz = (Z_all') * Z_all / M;
-    Rza = (Z_all') * a_used / M;
+    % Vecteur des symboles alignés (on ignore les N premiers symboles)
+    a_used = symboles(N+1: N+M);
 
-    % Conditionnement pour info
-    fprintf("Conditionnement de Rzz : %.2e\n", cond(Rzz));
+    % Matrices de corrélation
+    Rzz = (Z_all' * Z_all) / M;      % (N+1 × N+1)
+    Rza = (Z_all' * a_used) / M;     % (N+1 × 1)
 
-    % Résolution MMSE
-    C = Rzz \ Rza;
+    % Résolution du système MMSE
+    C = Rzz \ Rza;                   % (N+1 × 1)
 end

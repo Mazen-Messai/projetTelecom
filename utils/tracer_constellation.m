@@ -1,38 +1,35 @@
-function plot_constellation(signal_rx, modulation_type, M)
-    % plot_constellation : Trace la constellation d'un signal reçu
+function tracer_constellation(vecteur_rx, modulation_type, M)
+    % TRACER_CONSTELLATION : trace la constellation d'un vecteur reçu
     %
     % Entrées :
-    %   - signal_rx : signal reçu (vecteur complexe)
-    %   - modulation_type : 'PSK' ou 'QAM'
-    %   - M : ordre de modulation (ex: 2, 4, 8, 16)
+    %   vecteur_rx       : vecteur (complexe) reçu (1×L ou L×1)
+    %   modulation_type  : 'PSK' ou 'QAM'
+    %   M                : ordre de la modulation (ex. 2 pour BPSK, 16 pour 16-QAM)
 
-    % Vérif des entrées
-    if ~ismember(modulation_type, {'PSK', 'QAM'})
-        error('Modulation non supportée. Choisissez ''PSK'' ou ''QAM''.');
-    end
-    
-    % Création des points théoriques de la constellation
+    rx = vecteur_rx(:);
+
+    % Points de référence
     switch modulation_type
         case 'PSK'
-            ref = pskmod(0:M-1, M);  % Points de référence
+            ref = pskmod(0:M-1, M);   % points M-PSK
         case 'QAM'
-            ref = qammod(0:M-1, M);  % Points de référence
+            ref = qammod(0:M-1, M);   % points M-QAM
+        otherwise
+            error('Modulation "%s" non supportée (PSK/QAM seulement).', modulation_type);
     end
 
-    % Normalisation si nécessaire (utile pour comparaison PSK/QAM)
-    ref = ref / max(abs(ref));
-    signal_rx = signal_rx / max(abs(signal_rx));
+    % Normalisation
+    ref        = ref / max(abs(ref));
+    rx         = rx / max(abs(rx));
 
     % Tracé
-    figure;
-    plot(real(signal_rx), imag(signal_rx), 'b.', 'DisplayName', 'Signal reçu');
+    plot(real(rx), imag(rx), 'b.', 'MarkerSize', 10, 'DisplayName','Reçu');
     hold on;
     plot(real(ref), imag(ref), 'ro', 'MarkerSize', 8, 'LineWidth', 1.5, ...
-        'DisplayName', 'Constellation théorique');
-    grid on;
-    axis equal;
-    xlabel('Re');
-    ylabel('Im');
+        'DisplayName','Théorique');
+    grid on; axis equal;
+    xlabel('Re\{y\}'); ylabel('Im\{y\}');
     title(sprintf('Constellation %s-%d', modulation_type, M));
-    legend;
+    legend('Location','best');
+    hold off;
 end
